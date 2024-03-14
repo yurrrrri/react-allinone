@@ -6,6 +6,7 @@ import Board from "./components/Board";
 function App() {
   const [history, setHistory] = useState([{ squares: Array(9).fill(null) }]);
   const [isX, setIsX] = useState(true);
+  const [stepNumber, setStepNumber] = useState(0);
 
   function calculateWinner(squares) {
     const lines = [
@@ -40,15 +41,18 @@ function App() {
   }
 
   function handleClick(i) {
-    const newSquares = current.squares.slice();
+    const newHistory = history.slice(0, stepNumber + 1);
+    const newCurrent = newHistory(newHistory.length - 1);
+    const newSquares = newCurrent.squares.slice();
 
     if (calculateWinner(newSquares) || newSquares[i]) {
       return;
     }
 
     newSquares[i] = isX ? "X" : "O";
-    setHistory([...history, { squares: newSquares }]);
+    setHistory([...newHistory, { squares: newSquares }]);
     setIsX((current) => !current);
+    setStepNumber(newHistory.length);
   }
 
   const moves = history.map((step, move) => {
@@ -56,10 +60,15 @@ function App() {
 
     return (
       <li key={move}>
-        <button>{desc}</button>
+        <button onClick={() => jumpTo(move)}>{desc}</button>
       </li>
     );
   });
+
+  function jumpTo(step) {
+    setStepNumber(step);
+    setIsX(step % 2 === 0);
+  }
 
   return (
     <div className="game">
