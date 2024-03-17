@@ -1,16 +1,18 @@
-function Message({ message }) {
-  return <p>{message}</p>;
-}
+import React from "react";
 
-function ListItem({ post }) {
+const Message = React.memo(function Message({ message }) {
+  return <p>{message}</p>;
+});
+
+const ListItem = React.memo(function ListItem({ post }) {
   return (
     <li key={post.id}>
       <p>{post.title}</p>
     </li>
   );
-}
+});
 
-function List({ posts }) {
+const List = React.memo(function List({ posts }) {
   return (
     <ul>
       {posts.map((post) => (
@@ -18,7 +20,7 @@ function List({ posts }) {
       ))}
     </ul>
   );
-}
+});
 
 export default function B({ message, posts }) {
   return (
